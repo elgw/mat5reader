@@ -3,114 +3,117 @@
  *
  */
 
+// "Public" API
 #include "matreader.h"
+// Function headers and some definitions
 #include "_matreader.h"
 
 void op_mi_print_name(int op)
 {
-switch(op){
-  case 1:
-    printf("miINT8");
-break;
-  case 2:
-    printf("miUINT8");
-break;
-  case 3:
-    printf("miINT16");
-break;
-  case 4:
-    printf("miUINT16");
-break;
-  case 5:
-    printf("miINT32");
-break;
-  case 6:
-    printf("miUINT32");
-break;
-  case 7:
-    printf("miSINGLE");
-break;
-  case 9:
-    printf("miDOUBLE");
-break;
-  case 12:
-    printf("miINT64");
-break;
-  case 13:
-    printf("miUINT64");
-break;
-  case 14:
-    printf("miMATRIX");
-break;
-  case 15:
-    printf("miCOMPRESSED");
-break;
-  case 16:
-    printf("miUTF8");
-break;
-  case 17:
-    printf("miUTF16");
-break;
-  case 18:
-    printf("miUTF32");
-break;
-default:
-printf("op %d is unknown\n", op);
-}
+  switch(op){
+    case 1:
+      printf("miINT8");
+      break;
+    case 2:
+      printf("miUINT8");
+      break;
+    case 3:
+      printf("miINT16");
+      break;
+    case 4:
+      printf("miUINT16");
+      break;
+    case 5:
+      printf("miINT32");
+      break;
+    case 6:
+      printf("miUINT32");
+      break;
+    case 7:
+      printf("miSINGLE");
+      break;
+    case 9:
+      printf("miDOUBLE");
+      break;
+    case 12:
+      printf("miINT64");
+      break;
+    case 13:
+      printf("miUINT64");
+      break;
+    case 14:
+      printf("miMATRIX");
+      break;
+    case 15:
+      printf("miCOMPRESSED");
+      break;
+    case 16:
+      printf("miUTF8");
+      break;
+    case 17:
+      printf("miUTF16");
+      break;
+    case 18:
+      printf("miUTF32");
+      break;
+    default:
+      printf("op %d is unknown\n", op);
+  }
 }
 
 void op_mx_print_name(int op)
 {
-switch(op){
-  case 1:
-    printf("mxCELL_CLASS");
-break;
-  case 2:
-    printf("mxSTRUCT_CLASS");
-break;
-  case 3:
-    printf("mxOBJECT_CLASS");
-break;
-  case 4:
-    printf("mxCHAR_CLASS");
-break;
-  case 5:
-    printf("mxSPARSE_CLASS");
-break;
-  case 6:
-    printf("mxDOUBLE_CLASS");
-break;
-  case 7:
-    printf("mxSINGLE_CLASS");
-break;
-  case 8:
-    printf("mxINT8_CLASS");
-break;
-  case 9:
-    printf("mxUINT8_CLASS");
-break;
-  case 10:
-    printf("mxINT16_CLASS1");
-break;
-  case 11:
-    printf("mxUINT16_CLASS");
-break;
-  case 12:
-    printf("mxINT32_CLASS");
-break;
-  case 13:
-    printf("mxUINT32_CLASS");
-break;
-  case 14:
-    printf("mxINT64_CLASS");
-break;
-  case 15:
-    printf("mxUINT64_CLASS");
-break;
-default:
-printf("%d is unknown mx op", op);
+  switch(op){
+    case 1:
+      printf("mxCELL_CLASS");
+      break;
+    case 2:
+      printf("mxSTRUCT_CLASS");
+      break;
+    case 3:
+      printf("mxOBJECT_CLASS");
+      break;
+    case 4:
+      printf("mxCHAR_CLASS");
+      break;
+    case 5:
+      printf("mxSPARSE_CLASS");
+      break;
+    case 6:
+      printf("mxDOUBLE_CLASS");
+      break;
+    case 7:
+      printf("mxSINGLE_CLASS");
+      break;
+    case 8:
+      printf("mxINT8_CLASS");
+      break;
+    case 9:
+      printf("mxUINT8_CLASS");
+      break;
+    case 10:
+      printf("mxINT16_CLASS1");
+      break;
+    case 11:
+      printf("mxUINT16_CLASS");
+      break;
+    case 12:
+      printf("mxINT32_CLASS");
+      break;
+    case 13:
+      printf("mxUINT32_CLASS");
+      break;
+    case 14:
+      printf("mxINT64_CLASS");
+      break;
+    case 15:
+      printf("mxUINT64_CLASS");
+      break;
+    default:
+      printf("%d is unknown mx op", op);
+  }
 }
-}
+
 mde_t * mde_new()
 {
   mde_t * e = malloc(sizeof(mde_t));
@@ -124,6 +127,9 @@ mde_t * mde_new()
   e->dims = NULL;
   e->ndim = 0;
   e->data = NULL;
+  e->cpx = false;
+  e->glob = false;
+  e->log = false;
   return e;
 }
 
@@ -171,6 +177,20 @@ void mde_print_shape(mde_t * e)
   printf("]");
 }
 
+char * mde_get_name(mde_t * e)
+{
+  if(e->name == NULL)
+  {
+    char * name = malloc(3);
+    sprintf(name, "--");
+    return name;
+  }
+
+  char * name = strdup(e->name);
+  return name;
+
+}
+
 size_t mde_get_nel(mde_t * e)
 {
   if(e->ndim == 0)
@@ -214,7 +234,7 @@ void mde_add_child(mde_t * root, mde_t * child)
 
 void * mi_to_mx(int mitype, int mxtype, size_t nel, void * data)
 {
-    // Conversion from internal to external type
+  // Conversion from internal to external type
   if(mitype == miUTF8 && mxtype == mxCHAR_CLASS)
   {
     uint8_t * idata = (uint8_t *) data;
@@ -284,13 +304,13 @@ void * mi_to_mx(int mitype, int mxtype, size_t nel, void * data)
   }
 
   if(0){
-  printf("Conversion from ");
-  op_mi_print_name(mitype);
-  printf(" to ");
-  op_mx_print_name(mxtype);
-  printf("\n");
-  printf(" ---- Not supported\n");
-  
+    printf("Conversion from ");
+    op_mi_print_name(mitype);
+    printf(" to ");
+    op_mx_print_name(mxtype);
+    printf("\n");
+    printf(" ---- Not supported\n");
+
   }
   return NULL;
 }
@@ -364,7 +384,7 @@ static void parse_mxCHAR_CLASS(mde_t * e)
   epos += mi_parse_shape(e, e->data+epos);
 
   // Read variable name
-  mi_print_variable_name(e, e->data+epos);
+  mi_parse_name(e, e->data+epos);
 
   // Advance past the variable name
   uint8_t small; uint32_t mitype; uint32_t mibytes;
@@ -394,19 +414,17 @@ static void parse_mxCHAR_CLASS(mde_t * e)
   return;
 }
 
-static void parse_mxDOUBLE_CLASS(mde_t * e)
+static void parse_numeric_mx_CLASS(mde_t * e)
 {
 
   // Skip 8 bytes (external class, size)
   size_t epos = 8; 
 
-  // Skip flags for now TODO: complex flags
-  epos+=8;
-
+  epos+=mi_parse_flags(e, e->data+epos);
   epos += mi_parse_shape(e, e->data+epos);
 
   // Read variable name
-  mi_print_variable_name(e, e->data+epos);
+  mi_parse_name(e, e->data+epos);
 
   // Advance past the variable name
   uint8_t small; uint32_t mitype; uint32_t mibytes;
@@ -424,25 +442,12 @@ static void parse_mxDOUBLE_CLASS(mde_t * e)
   // Look back for the data
   // Needed conversion from mi-format to mx-format (internal to external)
   size_t nel = mde_get_nel(e);
-  double * data = (double *) mi_to_mx(mitype, mxDOUBLE_CLASS, nel, e->data+dpos);
+
+  void * data = (double *) mi_to_mx(mitype, e->mxCLASS, nel, e->data+dpos);
   if(data != NULL)
   {
-    if(0){
-    size_t nshow = 10;
-    if(nel < nshow)
-      nshow = nel;
-    for(size_t kk = 0 ; kk<nshow; kk++)
-    {
-      printf("%f ", data[kk]);
-    }
-    if(nel>nshow)
-      printf(" ... (%zu more)", nel-nshow);
-    printf("\n");
-    }
     e->xdata = (char*) data;
   }
-  //assert(epos == e->nbytes);
-
   return;
 }
 
@@ -462,7 +467,7 @@ static void parse_mxCELL_CLASS(mde_t * e, int level)
   epos += mi_parse_shape(e, e->data+epos);
 
   // Array name
-  mi_print_variable_name(e, e->data+epos);
+  mi_parse_name(e, e->data+epos);
   epos += mi_parse_header(e->data+epos, &mitype, &mibytes, &small);
   //printf("mibytes: %u\n", mibytes);
 
@@ -488,14 +493,14 @@ static void parse_mxSTRUCT_CLASS(mde_t * e, int level)
   epos += mi_parse_shape(e, e->data+epos);
 
   // Array name
-  mi_print_variable_name(e, e->data+epos);
+  mi_parse_name(e, e->data+epos);
   epos += mi_parse_header(e->data+epos, &mitype, &mibytes, &small);
   //printf("mibytes: %u\n", mibytes);
 
   // Field name
   epos += mi_parse_header(e->data+epos, &mitype, &mibytes, &small);
   //printf("field_size: %u\n", mibytes);
-//  op_mi_print_name(mitype); printf("\n");
+  //  op_mi_print_name(mitype); printf("\n");
 
   // Field name length
   mi_parse_header(e->data+epos, &mitype, &mibytes, &small);
@@ -513,7 +518,7 @@ static void parse_mxSTRUCT_CLASS(mde_t * e, int level)
   for(int kk = 0; kk< nfields; kk++)
   {
     fnamepos[kk] = epos+delta*kk;
-//    printf("Field name %d: %s\n", kk, e->data+epos + delta*kk);
+    //    printf("Field name %d: %s\n", kk, e->data+epos + delta*kk);
   }
   // Parse the fields ... note that they don't have names
   // otherwise they are like normal miMATRIXes
@@ -601,22 +606,20 @@ void mde_free(mde_t * e)
 
 void mde_print(mde_t * e)
 {
-//  printf("Type: %u -- ", e->data_type);
-//  op_mi_print_name(e->data_type);
-//  printf("\n");
-//  printf("Bytes: %u\n", e->nbytes);
+
   if(e->mxCLASS == mxCHAR_CLASS)
   {
     if(e->xdata != NULL)
     {
-      printf("%s\n", e->xdata);
+      printf("'%s'\n", e->xdata);
     } else {
       printf("No data available\n");
     }
+    return;
   }
 
-  if(e->mxCLASS == mxDOUBLE_CLASS)
-  {
+  if(e->mxCLASS == mxDOUBLE_CLASS && e->cpx == false)
+  {  
     if(e->xdata != NULL)
     {
       double * data = (double *) e->xdata;
@@ -636,12 +639,50 @@ void mde_print(mde_t * e)
       if(nel > show){
         printf(" ...");
       } else {
-      printf("]");
+        printf("]");
       }
       printf("\n");
     }
     return;
   }
+
+  printf("No preview of the data available, contributions are welcome!\n");
+  return;
+}
+
+void mde_print_desc(mde_t * node)
+{
+  char * name = mde_get_name(node);
+  printf("%s (", name);
+  free(name);
+  mde_print_shape(node);
+  printf(" ");
+  op_mx_print_name(node->mxCLASS);
+  if(node->cpx == true)
+  {
+    printf(" C");
+  }
+  if(node->glob == true)
+  {
+    printf(" G");
+  }
+  if(node->log == true)
+  {
+    printf(" L");
+  }
+  printf(")\n");
+}
+
+static uint32_t mi_parse_flags(mde_t * e, char * data)
+{
+  // Flag for complex
+  e->cpx = (data[1] & 0x8) >> 3;
+  // Flag for global
+  e->glob = (data[1] & 0x4) >> 2;
+  e->log = (data[1] & 0x2) >> 1;
+  e->mxCLASS = data[0];
+
+  return 8; 
 }
 
 static int mi_parse_header(const char * data, uint32_t * type, uint32_t * bytes, uint8_t* small)
@@ -671,7 +712,7 @@ static int mi_parse_header(const char * data, uint32_t * type, uint32_t * bytes,
   return 8 + bytes[0] + corr;
 }
 
-static void mi_print_variable_name(mde_t * e, const char * data)
+static void mi_parse_name(mde_t * e, const char * data)
 {
   // hexdump(data, 16);
   uint32_t mitype = 0;
@@ -699,7 +740,8 @@ static void mi_print_variable_name(mde_t * e, const char * data)
 static char * mde_inflate(mde_t * e, 
     size_t * inflated_bytes)
 {
-  int verbose = 0;
+  int ret = 0;
+
   z_stream infstream;
   infstream.zalloc = Z_NULL;
   infstream.zfree = Z_NULL;
@@ -708,38 +750,39 @@ static char * mde_inflate(mde_t * e,
   infstream.next_in = (Bytef *) e->data; // data to be decompressed
   infstream.avail_in = (uInt)(e->nbytes); // size of input
 
-  size_t e_data_size_max = 20*e->nbytes;
-  char * inflated_data = malloc(e_data_size_max);
+  size_t out_buf_size = 2*e->nbytes; // Total size of out buffer (might be increased)
+  size_t inc = e->nbytes; // How much to increase the buffer if full
+  char * inflated_data = malloc(out_buf_size); // First allocation
 
-  if(verbose)
-  {
-    printf("bytes to decompress: %u\n", infstream.avail_in);
-    printf("deflateBound: %zu\n", e_data_size_max);
-  }
-  infstream.next_out = (Bytef *) inflated_data; // allocated output
-  infstream.avail_out = (uInt) e_data_size_max; // size of output allocation
+//    printf("bytes to decompress: %u\n", infstream.avail_in);
 
-  // the actual DE-compression work.
   inflateInit(&infstream);
-  int status = inflate(&infstream, Z_SYNC_FLUSH);
-  assert(status == Z_STREAM_END);
 
-  inflateEnd(&infstream);
-  /* TODO
-   * e_data_max_size might be too small.
-   * Decompression has to be iterated to avoid this
-   * or it should make a dry run first to determine the exact size
-   * of the uncompressed data.
-   */
+  do {
+    infstream.next_out = (Bytef *) inflated_data + infstream.total_out; // allocated output
+    infstream.avail_out = (uInt) inc; // size of output allocation
+
+    // the actual DE-compression work.
+    ret = inflate(&infstream, Z_SYNC_FLUSH);
+    if(ret != Z_STREAM_END)
+    {
+  //    printf("Increasing the buffer size to %zu\n", out_buf_size);
+      out_buf_size += inc;
+      inflated_data = realloc(inflated_data, out_buf_size);
+    }
+  }
+  while(ret != Z_STREAM_END);
+
+  inflateEnd(&infstream); // Clean up
 
   // Check that everything was processed
   assert(infstream.avail_in == 0);
-  if(verbose)
-    printf("Size of input: %u, size of inflated: %zu\n", e->nbytes, infstream.total_out);
+  //  printf("Size of input: %u, size of inflated: %zu\n", e->nbytes, infstream.total_out);
 
   inflated_bytes[0] = infstream.total_out;
   return inflated_data;
 }
+
 
 void mdes_parse(mde_t * root, const char * data, size_t nbytes, int level)
 {
@@ -756,19 +799,6 @@ void mdes_parse(mde_t * root, const char * data, size_t nbytes, int level)
     // Strip of a data element from the buffer
     e = mde_new_from_data(data+offset, &read);
     assert(e != NULL);
-
-    if(0){
-    for(int kk = 0 ; kk < level; kk++)
-    { printf(">");}
-    
-
-    op_mi_print_name(e->data_type); 
-    if(e->data_type != miCOMPRESSED)
-    {
-      printf("/"); op_mx_print_name(mde_get_class(e));
-    }
-    printf("\n");
-    }
 
     // Increase the position before trying to read another mde
     // note: assert(read % 8 == 0); is not always true
@@ -788,24 +818,24 @@ void mdes_parse(mde_t * root, const char * data, size_t nbytes, int level)
 
       switch(class)
       {
-        case mxCHAR_CLASS:
-          parse_mxCHAR_CLASS(e);
-          break;
-        case mxDOUBLE_CLASS:
-          parse_mxDOUBLE_CLASS(e);
+        case mxCELL_CLASS:
+          parse_mxCELL_CLASS(e, level+1);
           break;
         case mxSTRUCT_CLASS:  
           parse_mxSTRUCT_CLASS(e, level+1);
           break;
-        case mxCELL_CLASS:
-          parse_mxCELL_CLASS(e, level+1);
+        case mxCHAR_CLASS:
+          parse_mxCHAR_CLASS(e);
+          break;
+        case mxDOUBLE_CLASS ... mxUINT64_CLASS:
+          parse_numeric_mx_CLASS(e);
           break;
         default:
-          if(0){
+#ifndef NDEBUG
           printf("No support for "); 
           op_mx_print_name(class); 
           printf(" yet\n");
-          }
+#endif
       }
     }
 

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 #include "matreader.h"
 #include <readline/readline.h>
 
@@ -29,11 +30,7 @@ void matbrowser(mde_t * root)
       printf("At root (%d variables)\n", node->nchild);
     } else
     {
-      printf("%s (", node->name);
-      mde_print_shape(node);
-      printf(" ");
-      op_mx_print_name(node->mxCLASS);
-      printf(")\n");
+      mde_print_desc(node);
     }
     if(node->nchild == 0)
     {
@@ -41,11 +38,9 @@ void matbrowser(mde_t * root)
     }
     for(int kk = 0; kk<node->nchild; kk++)
     {
-      printf("%d: %s (", kk, node->child[kk]->name);
-      mde_print_shape(node->child[kk]);
-      printf(" ");
-      op_mx_print_name(node->child[kk]->mxCLASS);
-      printf(")\n");
+      if(node->child[kk]->name == NULL || strlen(node->child[kk]->name) == 0)
+        printf("#%d ", kk);
+      mde_print_desc(node->child[kk]);
     }
 
     char * line = readline("? ");
@@ -70,15 +65,22 @@ void matbrowser(mde_t * root)
     int opt = -1;
     for(int kk = 0; kk<node->nchild; kk++)
     {
-      if(strcmp(line, node->child[kk]->name) == 0)
+      char * name = mde_get_name(node->child[kk]);
+      if(strcmp(line, name) == 0)
       {
         opt = kk;
       }
+      free(name);
     }
-
+    // If that fails, go by number
     if(opt == -1)
     {
-      opt = atoi(line);
+      char * end;
+      opt = strtol(line, &end, 10);
+      if(end == line)
+      {
+        opt = -1;
+      }
     }
 
     if(opt < 0 || opt >= node->nchild)

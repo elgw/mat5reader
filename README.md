@@ -72,9 +72,14 @@ Cy5
 ```
 
 ## TODO
- - [ ] Support more storage types, especially `mxSINGLE_CLASS`
- - [ ] Guard against corrupt or malign files (first of all: make sure that the size of the data elements are reasonable).
- - [ ] Write a proper decompression function, at least make sure that to use a dynamic buffer.
+ - [ ] Logical flag
+ - [ ] Conversion to the last numeric mx classes.
 
-## Bugs
- - [ ] Will crash if the inflated sizes are too big.
+## Might do
+ - [ ] Guard against corrupt or malign files (first of all: make sure that the size of the data elements are reasonable).
+
+## Will not fix
+ - Will not extend this from reading mat files on little-endian machines, that were generated on little endian-machines.
+ - `mxOBJECT_CLASS`
+ - `mxSPARSE_CLASS`
+ - Make it industrial grade (check for all possible errors etc)
