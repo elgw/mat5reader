@@ -1,12 +1,21 @@
 # A MATLAB Level 5 MAT-file reader
 
-This repo contains a small program to read and display the contents of MATLAB Level 5 MAT-files. `matreader` can be used as a library while `matbrowser` is a small utility to show how to use the `matreader` library.
+This repo contains a small program to read and display the contents of MATLAB Level 5 MAT-files. `matreader` can be used as a library while `matbrowser` is a small utility to show how to use the `matreader` library. It does not have full coverage of all data types and is not extensively tested. On the good side it only uses `libz` and is only a few `kB` when compiled.
 
-## Example usage:
+You should probably not use this since MATLAB already provides a [C/C++ interface](https://se.mathworks.com/help/matlab/matlab-c-api-to-read-mat-file-data.html). For Python there is [`scipy.io.loadmat`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html).
+
+## Usage:
+See `matbrowser.c` for examples on how to use the API.
+
+Building on Ubuntu 20.10:
 ```
 $ make -B
 gcc -c -g -Wall matreader.c -lm `pkg-config zlib --libs` -lreadline
 gcc -g -Wall matbrowser.c matreader.o -lm `pkg-config zlib --libs` -lreadline -o matbrowser
+```
+
+A sample session with the matbrowser:
+```
 $ ./matbrowser 002.NM 
 Reading 002.NM ... 
 
@@ -60,3 +69,5 @@ Cy5
  - [ ] Guard against corrupt or malign files (first of all: make sure that the size of the data elements are reasonable).
  - [ ] Write a proper decompression function, at least make sure that to use a dynamic buffer.
 
+## Bugs
+ - [ ] Will crash if the inflated sizes are too big.
