@@ -72,8 +72,7 @@ Cy5
 ```
 
 ## TODO
- - [ ] Logical flag
- - [ ] Conversion to the last numeric mx classes.
+ - [ ] Write the code for conversion of a few more array types from intermal mi format to external mx format.
 
 ## Might do
  - [ ] Guard against corrupt or malign files (first of all: make sure that the size of the data elements are reasonable).
