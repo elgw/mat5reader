@@ -17,11 +17,11 @@ See `matbrowser.c` for examples on how to use the API.
 Building on Ubuntu 20.10:
 ```
 $ make -B
-gcc -c -g -Wall matreader.c -lm `pkg-config zlib --libs` -lreadline
-gcc -g -Wall matbrowser.c matreader.o -lm `pkg-config zlib --libs` -lreadline -o matbrowser
+gcc -c -g -Wall src/matreader.c 
+gcc -g -Wall src/matbrowser.c matreader.o -lm `pkg-config zlib --libs` -lreadline -o matbrowser
 ```
 
-A sample session with the matbrowser:
+A sample session with matbrowser:
 ```
 $ ./matbrowser 002.NM 
 Reading 002.NM ... 
