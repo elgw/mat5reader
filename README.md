@@ -4,12 +4,14 @@ This repo contains a small library to read the contents of MATLAB Level 5 MAT-fi
 
 You should probably not use this since MATLAB already provides a [C/C++ interface](https://se.mathworks.com/help/matlab/matlab-c-api-to-read-mat-file-data.html). 
 
-For Python there is [`scipy.io.loadmat`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html). Then there is of course also [GNU Octave](https://www.gnu.org/software/octave/). For .NET there is the [matFileHandler](https://github.com/mahalex/MatFileHandler). For R there is [R.matlab](http://search.r-project.org/library/R.matlab/html/readMat.html).
+Other options (not a complete list):
+ * C: (tbeu/matio)[https://github.com/tbeu/matio], [jkriege2/TinyMAT](https://github.com/jkriege2/TinyMAT) (write only)
+ * Python: [`scipy.io.loadmat`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html).
+ * [GNU Octave](https://www.gnu.org/software/octave/). 
+  * .NET: [matFileHandler](https://github.com/mahalex/MatFileHandler). 
+  * R: [R.matlab](http://search.r-project.org/library/R.matlab/html/readMat.html).
 
 `matreader` can be used as a library while `matbrowser` is a small utility to show how to use the `matreader` library. It does not have full coverage of all data types and is not extensively tested. On the good side it only uses `libz` and is only a few `kB` when compiled.
-
-
-For writing MAT files, see also [TinyMAT](https://github.com/jkriege2/TinyMAT).
 
 This implementation is based on [http://www.mathworks.de/help/pdf_doc/matlab/matfile_format.pdf](http://www.mathworks.de/help/pdf_doc/matlab/matfile_format.pdf)
 
