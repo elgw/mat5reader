@@ -5,7 +5,7 @@ This repo contains a small library to read the contents of MATLAB Level 5 MAT-fi
 You should probably not use this since MATLAB already provides a [C/C++ interface](https://se.mathworks.com/help/matlab/matlab-c-api-to-read-mat-file-data.html). 
 
 Other options (not a complete list):
- * C: (tbeu/matio)[https://github.com/tbeu/matio], [jkriege2/TinyMAT](https://github.com/jkriege2/TinyMAT) (write only)
+ * C: [tbeu/matio](https://github.com/tbeu/matio), [jkriege2/TinyMAT](https://github.com/jkriege2/TinyMAT) (write only)
  * Python: [`scipy.io.loadmat`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html).
  * [GNU Octave](https://www.gnu.org/software/octave/). 
   * .NET: [matFileHandler](https://github.com/mahalex/MatFileHandler). 
