@@ -10,6 +10,7 @@ Other options (not a complete list):
  * [GNU Octave](https://www.gnu.org/software/octave/). 
   * .NET: [matFileHandler](https://github.com/mahalex/MatFileHandler). 
   * R: [R.matlab](http://search.r-project.org/library/R.matlab/html/readMat.html).
+  * Java: [HebiRobotics/MFL](https://github.com/HebiRobotics/MFL)
 
 `matreader` can be used as a library while `matbrowser` is a small utility to show how to use the `matreader` library. It does not have full coverage of all data types and is not extensively tested. On the good side it only uses `libz` and is only a few `kB` when compiled.
 
