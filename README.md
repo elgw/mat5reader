@@ -2,7 +2,9 @@
 
 This repo contains a small library to read the contents of MATLAB Level 5 MAT-files, and little program that uses this library to browse MAT-files.
 
-You should probably not use this since MATLAB already provides a [C/C++ interface](https://se.mathworks.com/help/matlab/matlab-c-api-to-read-mat-file-data.html). For Python there is [`scipy.io.loadmat`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html). Thn there is of course also [GNU Octave](https://www.gnu.org/software/octave/). 
+You should probably not use this since MATLAB already provides a [C/C++ interface](https://se.mathworks.com/help/matlab/matlab-c-api-to-read-mat-file-data.html). 
+
+For Python there is [`scipy.io.loadmat`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html). Then there is of course also [GNU Octave](https://www.gnu.org/software/octave/). For .NET there is the [matFileHandler](https://github.com/mahalex/MatFileHandler).
 
 `matreader` can be used as a library while `matbrowser` is a small utility to show how to use the `matreader` library. It does not have full coverage of all data types and is not extensively tested. On the good side it only uses `libz` and is only a few `kB` when compiled.
 
