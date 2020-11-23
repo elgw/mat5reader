@@ -754,7 +754,7 @@ static char * mde_inflate(mde_t * e,
   size_t inc = e->nbytes; // How much to increase the buffer if full
   char * inflated_data = malloc(out_buf_size); // First allocation
 
-//    printf("bytes to decompress: %u\n", infstream.avail_in);
+  //    printf("bytes to decompress: %u\n", infstream.avail_in);
 
   inflateInit(&infstream);
 
@@ -766,7 +766,7 @@ static char * mde_inflate(mde_t * e,
     ret = inflate(&infstream, Z_SYNC_FLUSH);
     if(ret != Z_STREAM_END)
     {
-  //    printf("Increasing the buffer size to %zu\n", out_buf_size);
+      //    printf("Increasing the buffer size to %zu\n", out_buf_size);
       out_buf_size += inc;
       inflated_data = realloc(inflated_data, out_buf_size);
     }
@@ -836,6 +836,7 @@ void mdes_parse(mde_t * root, const char * data, size_t nbytes, int level)
           op_mx_print_name(class); 
           printf(" yet\n");
 #endif
+          break;
       }
     }
 
